@@ -1,51 +1,90 @@
 const pool = require('../db');
 
 exports.getAllUsers = (req, res, next) => {
-    try {
-        const query = "select * from riders";
-        const rows = pool.query(query);
-        res.status(200).json(rows);
-    } catch (error) {
-        res.status(400).json({error});
-    }
+    pool.getConnection()
+        .then(conn => {
+            conn.query("select * from riders")
+                .then(rows => {
+                    console.log(rows);
+                    res.status(200).json(rows);
+                })
+                .catch(err => {
+                        res.status(400).json({err});
+                    }
+                )
+        })
+        .catch(err => {
+            res.status(400).json({err});
+        })
 }
 
 exports.getInfoUser = (req, res, next) => {
-    try {
-        const query = "select * from riders where id = ?";
-        const rows = pool.query(query, [req.params.userId]);
-        res.status(200).json(rows);
-    } catch (error) {
-        res.status(400).json({error});
-    }
+    pool.getConnection()
+        .then(conn => {
+            conn.query("select * from riders where id = ?",
+                [req.params.userId])
+                .then(rows => {
+                    res.status(200).json(rows);
+                })
+                .catch(err => {
+                        res.status(400).json({err});
+                    }
+                )
+        })
+        .catch(err => {
+            res.status(400).json({err});
+        })
 }
 
 exports.createUser = (req, res, next) => {
-    try {
-        const query = "insert into riders (id, name, familyName, lessonCredits) values (?, ?, ?, ?)";
-        const rows = pool.query(query, [req.body.userId, req.body.userName, req.body.userFamilyName, req.body.userLessonCredits]);
-        res.status(201).json({message: 'User created'});
-    } catch (error) {
-        res.status(400).json({error});
-    }
+    pool.getConnection()
+        .then(conn => {
+            conn.query("insert into riders (id, name, familyName, lessonCredits) values (?, ?, ?, ?)",
+                [req.body.userId, req.body.userName, req.body.userFamilyName, req.body.userLessonCredits])
+                .then(rows => {
+                    res.status(201).json({message: 'User created'});
+                })
+                .catch(err => {
+                        res.status(400).json({err});
+                    }
+                )
+        })
+        .catch(err => {
+            res.status(400).json({err});
+        })
 }
 
+
 exports.updateUser = (req, res, next) => {
-    try {
-        const query = "update riders set name = ?, familyName = ?, lessonCredits = ? where id = ?";
-        const rows = pool.query(query, [req.body.userName, req.body.userFamilyName, req.body.userLessonCredits, req.params.userId]);
-        res.status(200).json({message: 'User updated'});
-    } catch (error) {
-        res.status(400).json({error});
-    }
+    pool.getConnection()
+        .then(conn => {
+            conn.query("update riders set name = ?, familyName = ?, lessonCredits = ? where id = ?",
+                [req.body.userName, req.body.userFamilyName, req.body.userLessonCredits, req.params.userId])
+                .then(rows => {
+                    res.status(200).json({message: 'User updated'});
+                })
+                .catch(err => {
+                    res.status(400).json({err});
+                })
+        })
+        .catch(err => {
+            res.status(400).json({err});
+        })
 }
 
 exports.deleteUser = (req, res, next) => {
-    try {
-        const query = "delete from riders where id = ?";
-        const rows = pool.query(query, [req.params.userId]);
-        res.status(200).json({message: 'User deleted'});
-    } catch (error) {
-        res.status(400).json({error});
-    }
+    pool.getConnection()
+        .then(conn => {
+            conn.query("delete from riders where id = ?",
+                [req.params.userId])
+                .then(rows => {
+                    res.status(200).json({message: 'User deleted'});
+                })
+                .catch(err => {
+                    res.status(400).json({err});
+                })
+        })
+        .catch(err => {
+            res.status(400).json({err});
+        })
 }
