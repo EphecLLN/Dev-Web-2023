@@ -1,0 +1,36 @@
+Table equi.cavalier {
+  id int [pk, increment]
+  nom varchar
+  prenom varchar
+  creditCours int
+}
+
+Table equi.paiements {
+  id int [pk, increment]
+  idCavalier int [ref: > equi.cavalier.id]
+  datePaiements date
+  somme int
+}
+
+Table equi.cours {
+  id int [pk, increment]
+  heureDebut time
+  heureFin time
+  profId int
+  dateCours date
+}
+
+Table equi.presence {
+  id int [pk, increment]
+  idCavalier int [ref: > equi.cavalier.id]
+  idCours int [ref: > equi.cours.id]
+  present bool
+  equideId int [ref: - equi.equider.id]
+}
+
+Table equi.equider {
+  id int [pk, increment]
+  nom varchar
+  robe varchar
+  pedigree varchar
+}
