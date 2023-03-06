@@ -2,7 +2,7 @@ const express = require('express');
 const mariadb = require('mariadb');
 const userRoutes = require('./routes/user');
 const paymentsRoutes = require('./routes/payment');
-
+const pool = require('./db');
 
 
 
@@ -14,6 +14,17 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+app.use("/", (req, res)=>{
+    pool.getConnection()
+        .then(conn => {
+        conn.query("select * from riders")
+            .then(rows => {
+                console.log(rows);
+                res.status(200).json(rows);
+            })
+    })
+})
 
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/user", userRoutes);
