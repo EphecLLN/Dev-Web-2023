@@ -1,24 +1,36 @@
 const pool = require('../db');
 
 exports.getUserPayments = (req, res, next) => {
+    /**
+     * Ici on a toutes les requetes /api/payment
+     * Dans celle ci (getUserPayments) on a une requete GET
+     */
     pool.getConnection()
         .then(conn => {
             conn.query("select * from payments where idRider = ?",
                 [req.params.userId])
                 .then(rows => {
                     res.status(200).json(rows);
+                    /**
+                     * Si réponse sucess revoie le json
+                     */
                 })
                 .catch(err => {
                         res.status(400).json({err});
+                    /**
+                     * Si erreur revoie un json avec l'erreur
+                     */
                     }
                 )
 
         })
         .catch(err => {
             res.status(400).json({err});
+            /**
+             * Similaire à celui du dessus
+             */
         })
 }
-
 
 exports.createUserPayment = (req, res, next) => {
     pool.getConnection()

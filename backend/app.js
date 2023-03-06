@@ -29,7 +29,17 @@ app.use("/", (req, res)=>{
 })
 
 app.use("/api/payments", paymentsRoutes);
+/**
+ * Si requete /api/payment renvoie vers le routeur /routes/payment.js
+ * Voir la suite des explications dans le fichier /routes/payment.js
+ */
 app.use("/api/user", userRoutes);
+/**
+ * Tout ce que j'ai noté dans celui du dessus qui renvoie à payments
+ * est similaire à celui ci mais celui ci renvoie au
+ * routeur /routes/user.js
+ * et derrière au controller /controllers/user.js
+ */
 
 module.exports = app;
 
