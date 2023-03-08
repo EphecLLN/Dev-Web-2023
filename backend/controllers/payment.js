@@ -35,8 +35,8 @@ exports.getUserPayments = (req, res, next) => {
 exports.createUserPayment = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
-            conn.query("insert into payments (id, idRider, paymentDate) values (?, ?, ?)",
-                [req.params.userid, req.body.payid, req.body.payDate])
+            conn.query("insert into payments (idRider, sum) values (?, ?)",
+                [req.params.userid, req.body.sum])
                 .then(rows => {
                     res.status(201).json({message: 'Payment created'});
                 })
@@ -54,8 +54,8 @@ exports.createUserPayment = (req, res, next) => {
 exports.updateUserPayment = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
-            conn.query("update payments set idRider = ?, paymentDate = ? where id = ?",
-                [req.params.userid, req.body.payid, req.body.payDate])
+            conn.query("update payments set idRider = ?, sum = ? where id = ?",
+                [req.params.userid, req.body.sum, req.body.payid])
                 .then(rows => {
                     res.status(200).json({message: 'Payment updated'});
                 })

@@ -39,7 +39,7 @@ exports.getInfoUser = (req, res, next) => {
 exports.createUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
-            conn.query("insert into riders (name, familyName, lessonCredits) values (?, ?)",
+            conn.query("insert into riders (name, familyName) values (?, ?)",
                 [req.body.name, req.body.fname])
                 .then(rows => {
                     res.status(201).json({message: 'User created'});
