@@ -14,6 +14,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(express.json());
+
 app.use("/api/payments", paymentsRoutes);
 /**
  * Si requete /api/payment renvoie vers le routeur /routes/payment.js
