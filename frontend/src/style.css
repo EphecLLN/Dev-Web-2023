@@ -1,14 +1,22 @@
-body{
+td, th{
+    height:20px;
+    text-align : center;
+    border: 1px solid black;
+}
+
+table{
+    width:70%;
+    height: 70%;
+}
+#root{
     display: flex;
-    flex-direction: row;
-}
+    height: 100%;
+    justify-content: center;
 
-#left-container{
-    box-sizing:border-box;
-    width: 50%;
 }
-
-#right-container{
-    box-sizing:border-box;
-    width: 50%;
-}
+/*html{*/
+/*    height:100%;*/
+/*}*/
+/*body{*/
+/*    height:100%;*/
+/*}*/
