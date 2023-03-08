@@ -22,7 +22,7 @@ exports.getInfoUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
             conn.query("select * from riders where id = ?",
-                [req.params.userId])
+                [req.params.id])
                 .then(rows => {
                     res.status(200).json(rows);
                 })
@@ -40,7 +40,7 @@ exports.createUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
             conn.query("insert into riders (id, name, familyName, lessonCredits) values (?, ?, ?, ?)",
-                [req.body.userId, req.body.userName, req.body.userFamilyName, req.body.userLessonCredits])
+                [req.body.id, req.body.userName, req.body.userFamilyName, req.body.userLessonCredits])
                 .then(rows => {
                     res.status(201).json({message: 'User created'});
                 })
@@ -59,7 +59,7 @@ exports.updateUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
             conn.query("update riders set name = ?, familyName = ?, lessonCredits = ? where id = ?",
-                [req.body.userName, req.body.userFamilyName, req.body.userLessonCredits, req.params.userId])
+                [req.body.userName, req.body.userFamilyName, req.body.userLessonCredits, req.params.id])
                 .then(rows => {
                     res.status(200).json({message: 'User updated'});
                 })
@@ -76,7 +76,7 @@ exports.deleteUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
             conn.query("delete from riders where id = ?",
-                [req.params.userId])
+                [req.params.id])
                 .then(rows => {
                     res.status(200).json({message: 'User deleted'});
                 })

@@ -14,17 +14,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/", (req, res)=>{
-    pool.getConnection()
-        .then(conn => {
-        conn.query("select * from riders")
-            .then(rows => {
-                console.log(rows);
-                res.status(200).json(rows);
-            })
-    })
-})
-
 app.use("/api/payments", paymentsRoutes);
 /**
  * Si requete /api/payment renvoie vers le routeur /routes/payment.js
