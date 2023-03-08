@@ -1,0 +1,14 @@
+body{
+    display: flex;
+    flex-direction: row;
+}
+
+#left-container{
+    box-sizing:border-box;
+    width: 50%;
+}
+
+#right-container{
+    box-sizing:border-box;
+    width: 50%;
+}
