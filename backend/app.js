@@ -3,10 +3,7 @@ const mariadb = require('mariadb');
 const userRoutes = require('./routes/user');
 const paymentsRoutes = require('./routes/payment');
 const pool = require('./db');
-
 require('dotenv').config({path :'.env-local'});
-console.log(process.env.BRUH)
-
 
 const app = express();
 
