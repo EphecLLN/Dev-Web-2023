@@ -39,8 +39,8 @@ exports.getInfoUser = (req, res, next) => {
 exports.createUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
-            conn.query("insert into riders (name, familyName, lessonCredits) values (?, ?, ?)",
-                [req.body.userName, req.body.userFamilyName, req.body.userLessonCredits])
+            conn.query("insert into riders (name, familyName, lessonCredits) values (?, ?)",
+                [req.body.name, req.body.fname])
                 .then(rows => {
                     res.status(201).json({message: 'User created'});
                 })
@@ -59,7 +59,7 @@ exports.updateUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
             conn.query("update riders set name = ?, familyName = ?, lessonCredits = ? where id = ?",
-                [req.body.userName, req.body.userFamilyName, req.body.userLessonCredits, req.params.id])
+                [req.body.name, req.body.fname, req.body.lessCred, req.params.id])
                 .then(rows => {
                     res.status(200).json({message: 'User updated'});
                 })
