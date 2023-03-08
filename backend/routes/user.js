@@ -31,6 +31,7 @@ router.get('/', function (req, res, next){
 router.get('/:id', function (req, res, next){
     pool.getConnection()
         .then(conn => {
+            console.log(req.params.id);
             conn.query("select * from riders where id = ?",
                 [req.params.id])
                 .then(rows => {
