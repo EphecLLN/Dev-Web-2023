@@ -12,7 +12,7 @@ router.get('/:userid', userCtrl.getUserPayments);
  */
 router.post('/:userid', userCtrl.createUserPayment);
 router.put('/:userid', userCtrl.updateUserPayment);
-router.delete('/:userid', userCtrl.deleteUserPayment);
+router.delete('/:paymentid', userCtrl.deleteUserPayment);
 
 
 module.exports = router;
