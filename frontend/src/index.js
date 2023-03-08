@@ -17,28 +17,46 @@ class UserRow extends React.Component{
         }
         if (this.state.size === 'expanded') {
             return <tr onClick={()=>this.setState({size:'minified'})}>
-                <td style={{height: 100}}>{this.props.userId}</td>
-                <td style={{height: 100}}>{this.props.userName}</td>
-                <td style={{height: 100}}>{this.props.userCredits}</td>
+                <td colSpan={3}>
+                    <table>
+                        <tr>
+                            <td>{this.props.userId}</td>
+                            <td>{this.props.userName}</td>
+                            <td>{this.props.userCredits}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan={3}>
+                                insert text stuff here
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         }
     }
 }
 
+// class NewUser extends React.component {
+//
+// }
+
 class Requests extends React.Component{
+    constructor() {
+        super();
+        this.rows = [];
+    }
     componentDidMount() {
-        fetch("https://swapi.co/api/toto/")
+        fetch("http://localhost:3001/api/user/")
             .then(res => res.json())
             .then(
                 (result) => {
+                    console.log(result);
+                    this.rows=result;
                     this.setState({
                         isLoaded: true,
                         items: result.results
                     });
                 },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
                 (error) => {
                     this.setState({
                         isLoaded: true,
@@ -48,10 +66,9 @@ class Requests extends React.Component{
             )
     }
     render(){
-     const rows = [{id:1,name:'toto', credits:420},{id:2, name:'tata', credits: 69}]
      return <table>
          <tr><th>id</th><th>name</th><th>credits</th></tr>
-         {rows.map((user)=> <UserRow userId={user.id} userName={user.name} userCredits={user.credits} />)}
+         {this.rows.map((user)=> <UserRow userId={user.id} userName={user.name} userCredits={user.lessonCredits} />)}
          <tr><td colSpan={3}>+</td></tr>
      </table>
     }
