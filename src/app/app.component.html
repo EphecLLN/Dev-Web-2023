@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ma page web</title>
+    <!-- Insertion des styles CSS ici -->
+    <style>
+        /* Style pour le logo */
+        
+        .logo {
+            float: left;
+            width: 100px;
+            height: 100px;
+            background-image: url("favicon.ico");
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-right: 20px;
+        }
+        /* Style pour la barre de navigation */
+        
+        .navbar {
+            text-align: center;
+            background-color: #333;
+            overflow: hidden;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        /* Style pour les liens de la barre de navigation */
+        
+        .navbar a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        /* Style pour le lien "My Projects" */
+        
+        .navbar a#my-projects {
+            float: right;
+        }
+        /* Style pour l'icône des initiales */
+        
+        .initials {
+            float: right;
+            background-color: #ddd;
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 45%;
+            width: 35px;
+            height: 35px;
+            padding: 10px;
+            margin-right: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        /* Style pour la section "Your Projects" */
+        
+        .projects {
+            margin-top: 50px;
+            text-align: center;
+        }
+        /* Style pour les blocs "project" */
+        
+        .project {
+            display: inline-block;
+            width: 300px;
+            height: 375px;
+            background-color: #f2f2f2;
+            margin: 20px;
+            cursor: pointer;
+        }
+        /* Style pour les images des projets */
+        
+        .project img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        /* Style pour les titres des projets */
+        
+        .project h3 {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        /* Style pour les descriptions des projets */
+        
+        .project p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo"></div>
+        <div class="navbar">
+            <a href="#">Accueil</a>
+            <a href="#">Projets</a>
+            <a href="#">Contact</a>
+            <a id="my-projects" href="#">My Projects</a>
+            <form>
+                <label for="search">Rechercher :</label>
+                <input type="text" id="search" name="search">
+            </form>
+            <div class="initials">LC</div>
+        </div>
+    </div>
+
+    <div class="projects">
+        <h2>Your Projects</h2>
+        <div class="project">
+            <img src="https://actucameroun.com/wp-content/uploads/2020/12/ecole-nigeria.jpg" alt="Projet 1">
+            <h3>Création d'une Ecole au Nigéria</h3>
+            <p>Main d'oeuvre,
+                <br> 30.000€
+            </p>
+        </div>
+        <div class="project">
+            <img src="https://www.nicolas-aubineau.com/wp-content/uploads/2019/07/fonctionnement-foie.jpg" alt="Projet 2">
+            <h3>Cagnotte pour un foie pour Mr.Noel après le Danemark</h3>
+            <p>150.00€</p>
+        </div>
+        <div class="project">
+            <img src="https://cdn.webshopapp.com/shops/283713/files/345289016/image.jpg" alt="Projet 3">
+            <h3>Col roulé pour Louis</h3>
+            <p>45€</p>
+        </div>
+    </div>
+    <app-heroes></app-heroes>
+    <app-messages></app-messages>
+</body>
+
+</html>

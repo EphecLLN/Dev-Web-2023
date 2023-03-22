@@ -1,21 +1,27 @@
-# Dev-Web-2023
-Template de repo pour le projet Dev Web 2023
+# CrowdF
 
-## Comment copier ce Wiki? 
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 
-Pour récupérer le template et l'utiliser dans le cadre de votre projet, vous allez devoir faire un "fork" de ce repo.  Cependant, le wiki n'est pas copié automatiquement.  Suivez donc la procédure ci-dessous : 
+## Development server
 
-1.  Créez un fork de ce repository.  Ce sera votre repo de projet, avec une URL de type `https://github.com/<username>/<repo-name>`.  
-2.  Créez un wiki dans ce nouveau repo, avec une Home page vide par exemple. 
-3.  Clonez le repo git du wiki original sur votre machine :  `git clone https://github.com/EphecLLN/Dev-Web-2022.wiki.git`
-4.  Pour "pousser" le wiki présent sur votre machine vers votre repository de projet, vous allez changer le pointeur "remote" de votre copie locale : 
-    `git remote add fork https://github.com/<username>/<repo-name>.wiki.git`
-6.  Forcez à présent la copie du wiki sur votre machine vers votre repository de projet.  Cela écrasera le wiki vide que vous aviez créé plus tôt avec le template :   `git push -f fork master`
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Utilisation
+## Code scaffolding
 
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
+## Build
 
-Il vous est demandé de respecter la table des matières du projet, afin que les enseignants puissent facilement retrouver les informations qu'ils cherchent.  Si vous souhaitez effectuer un changement dans sa structure, parlez-en d'abord avec votre coach.  
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-Si vous trouvez que les pages sont trop longues, vous pouvez en créer de nouvelles, mais vous devez alors vous assurez que les liens sont mis à jour dans la table des matières.  
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
