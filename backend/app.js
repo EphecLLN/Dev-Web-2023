@@ -1,6 +1,6 @@
 const express = require('express');
 const mariadb = require('mariadb');
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/horse');
 const paymentsRoutes = require('./routes/payment');
 const pool = require('./db');
 require('dotenv').config({path :'.env-local'});
@@ -25,8 +25,8 @@ app.use("/api/user", userRoutes);
 /**
  * Tout ce que j'ai noté dans celui du dessus qui renvoie à payments
  * est similaire à celui ci mais celui ci renvoie au
- * routeur /routes/user.js
- * et derrière au controller /controllers/user.js
+ * routeur /routes/horse.js
+ * et derrière au controller /controllers/horse.js
  */
 
 module.exports = app;
