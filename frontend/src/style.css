@@ -1,27 +1,34 @@
-td, th{
-    height:20px;
-    text-align : center;
-    border: 1px solid black;
-}
-tr{
-    width: 100%;
-}
-table{
-    width:70%;
-    height: 70%;
-}
-td > table{
-    width:100%;
+.profile-pic{
+    width: 200px;
+    height: 200px;
 }
 #root{
     display: flex;
+    width: 100%;
     height: 100%;
-    justify-content: center;
-
+    #border: 1px solid red;
 }
-/*html{*/
-/*    height:100%;*/
-/*}*/
-/*body{*/
-/*    height:100%;*/
-/*}*/
+.top-container{
+    width:100%;
+    #border: 1px solid green;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.top-left{
+    #border: 1px solid yellow;
+    width: fit-content;
+}
+.top-right{
+    #border: 1px solid blue;
+    width: fit-content;
+}
+.bot-container{
+    #border: 1px solid brown;
+}
+
+
+.full{
+    width:100%;
+    height: 100%;
+}

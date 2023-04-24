@@ -1,77 +1,81 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom/client';
 import './style.css';
 
-class UserRow extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {size:'minified'};
-    }
-    render(){
-        if (this.state.size === 'minified') {
-            return <tr onClick={()=>this.setState({size:'expanded'})}>
-                <td>{this.props.userId}</td>
-                <td>{this.props.userName}</td>
-                <td>{this.props.userCredits}</td>
-            </tr>
-        }
-        if (this.state.size === 'expanded') {
-            return <tr onClick={()=>this.setState({size:'minified'})}>
-                <td colSpan={3}>
-                    <table>
-                        <tr>
-                            <td>{this.props.userId}</td>
-                            <td>{this.props.userName}</td>
-                            <td>{this.props.userCredits}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan={3}>
-                                insert text stuff here
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        }
-    }
-}
-
-// class NewUser extends React.component {
+// class RiderProfile extends React.Component {
+//     render(){
+//         return <div>
+//             <img className="profile-pic" src="https://d1cjc45f8abyu4.cloudfront.net/test1.png"/>
+//             <p>rider name</p>
+//         </div>
+//     }
+// }
 //
+// class CurrentState extends React.Component {
+//     render(){
+//         return <div>
+//             <p>Nombre de credit de cours: <span>69</span></p>
+//             <p>Nombre de cours reserver: <span>69</span></p>
+//         </div>
+//     }
+// }
+//
+// class Operation extends React.Component {
+//     render(){
+//         return <form onSubmit="() => return false;">
+//             <label for="op">Operation:</label>
+//             <input id="op" type="number"/><br/>
+//             <label for="comment">Commentaire:</label><br/>
+//             <input id="comment" type="textarea"/>
+//             {/*<input type="button">Soumettre</input>*/}
+//         </form>
+//     }
+// }
+// class Log extends React.Component {
+//     render(){
+//         return <textarea></textarea>
+//     }
+// }
+//
+// class Structure extends React.Component {
+//     render(){
+//         return <div class="full"><div className="top-container">
+//             <div className="top-left">
+//                 <RiderProfile/>
+//             </div>
+//             <div className="top-right">
+//                 <CurrentState/>
+//                 <Operation/>
+//             </div>
+//         </div>
+//             <hr/>
+//         <div className="bot-container">
+//             <Log/>
+//         </div></div>
+//     }
 // }
 
-class Requests extends React.Component{
-    constructor() {
-        super();
-        this.rows = [];
+const Structure = () => {
+    const [users, setUsers] =useState([])
+
+    const fetchUserData = () => {
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                setUsers(data)
+            })
     }
-    componentDidMount() {
-        fetch("http://localhost:3001/api/user/")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result);
-                    this.rows=result;
-                    this.setState({
-                        isLoaded: true,
-                        items: result.results
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
-    }
-    render(){
-     return <table>
-         <tr><th>id</th><th>name</th><th>credits</th></tr>
-         {this.rows.map((user)=> <UserRow userId={user.id} userName={user.name} userCredits={user.lessonCredits} />)}
-         <tr><td colSpan={3}>+</td></tr>
-     </table>
-    }
+
+    useEffect(()=>{
+        fetchUserData()
+    },[])
+
+    return (<div> {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+    ))} </div>);
 }
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Requests />);
+root.render(<Structure />);
