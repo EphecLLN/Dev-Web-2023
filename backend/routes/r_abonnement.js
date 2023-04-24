@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userCtrl = require('../controllers/abonnementCtrl');
+const userCtrl = require('../controllers/cl_abonnement');
 const pool = require("../db");
 
 router.get('/user/:id', userCtrl.user);

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userCtrl = require('../controllers/horse');
+const userCtrl = require('../controllers/cl_horse');
 const pool = require("../db");
 
 router.get('/coat', userCtrl.coat);
