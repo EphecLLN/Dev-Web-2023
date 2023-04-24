@@ -73,17 +73,18 @@ exports.getAllUsers = (req, res, next) => {
             res.status(400).json({err});
         })
 }
-
+*/
 exports.getInfoUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
-            conn.query("select * from riders where id = ?",
-                [req.params.id])
+            conn.query("call getUserInfo( " + req.params.id + ")")
                 .then(rows => {
-                    res.status(200).json(rows);
+                    console.log(rows[0]);
+                    res.status(200).json(rows[0]);
                 })
                 .catch(err => {
-                        res.status(400).json({err});
+                        console.log(err)
+                        res.status(400).json(err);
                     }
                 )
         })
@@ -91,7 +92,7 @@ exports.getInfoUser = (req, res, next) => {
             res.status(400).json({err});
         })
 }
-
+/*
 exports.createUser = (req, res, next) => {
     pool.getConnection()
         .then(conn => {

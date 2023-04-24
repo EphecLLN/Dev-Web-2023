@@ -12,5 +12,5 @@ router.delete('/:id', userCtrl.deleteUser);*/
 router.get('/coat', userCtrl.coat);
 router.get('/breed', userCtrl.breed);
 router.get('/breeder', userCtrl.breeder);
-
+router.get('/:id', userCtrl.getInfoUser)
 module.exports = router;
