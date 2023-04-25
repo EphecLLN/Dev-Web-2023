@@ -7,6 +7,7 @@ import Calendrier from './components/Calendrier.js';
 import Abonnement from "./components/Abonnement";
 
 import './css/Nav.css'
+import AddHorse from "./components/AddHorse";
 
 class Nav extends React.Component{
     render(){
@@ -17,14 +18,14 @@ class Nav extends React.Component{
                 <ul id="ul-nav">
                     <li className="nav"><Link to='/' className="acceuil">Acceuil</Link></li>
                     <li className="nav"><Link to='/calendrier' className="calendrier">Calendrier</Link></li>
-                    <li className="nav"><Link to='/chevaux' className="chevaux">Chevaux</Link></li>
+                    <li className="nav"><Link to='/addhorse' className="chevaux">Chevaux</Link></li>
                     <li className="nav"><Link to='/abonnement' className="abonnement">Abonnement</Link></li>
                 </ul>
                 </nav>
                 <Routes>
                     <Route exact path="/" element={<Home />} />
                     <Route path="/calendrier" element={<Calendrier/>} />
-                    <Route path="/chevaux" element={<Chevaux />} />
+                    <Route path="/addhorse" element={<AddHorse />} />
                     <Route path="/abonnement" element={<Abonnement />} />
                 </Routes>
             </div>
