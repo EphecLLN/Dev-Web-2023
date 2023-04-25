@@ -5,7 +5,7 @@ exports.coat = (req, res, next) => {
         .then(conn => {
             conn.query("CALL coatOptions()")
                 .then(rows => {
-                    console.log(rows);
+                    console.log("Calling coatOptions");
                     res.status(200).json(rows[0]);
                 })
                 .catch(err => {
@@ -24,7 +24,7 @@ exports.breed = (req, res, next) => {
         .then(conn => {
             conn.query("CALL breedOptions()")
                 .then(rows => {
-                    console.log(rows);
+                    console.log("Calling breedOptions");
                     res.status(200).json(rows[0]);
                 })
                 .catch(err => {
@@ -43,7 +43,7 @@ exports.breeder = (req, res, next) => {
         .then(conn => {
             conn.query("CALL breederOptions()")
                 .then(rows => {
-                    console.log(rows);
+                    console.log("Calling breederOptions");
                     res.status(200).json(rows[0]);
                 })
                 .catch(err => {

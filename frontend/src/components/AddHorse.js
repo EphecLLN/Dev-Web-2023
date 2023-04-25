@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import '../css/Abonnement.css';
 import parse from 'html-react-parser'
+import '../css/AddHorse.css'
 
 
 const AddHorse = () => {
@@ -64,6 +64,7 @@ const AddHorse = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
+        verifs(event)
         console.log("submitting");
         console.log(event)
     }
@@ -73,20 +74,23 @@ const AddHorse = () => {
         return (
             <form onSubmit={handleSubmit}>
                 <FormTop/>
-                <div>
+                <div className={"right"}>
+                <div className={"field"}>
                     <label htmlFor="breed">Race: *<br></br></label>
                     <select id="breed" required><BreedDisplay breeddata={breeddata}/></select>
                 </div>
-                <div>
+                <div className={"field"}>
                     <label htmlFor="breeder">Eleveur:<br></br></label>
                     <select id="breeder" name="breeder"><BreederDisplay breederdata={breederdata}/></select>
                 </div>
-                <div>
+                <div className={"field"}>
                     <label htmlFor="coat">Robe: *<br></br></label>
                     <select id="coat" name="coat" required><CoatsDisplay coatdata={coatdata}/></select>
                 </div>
                 <FormBot/>
-                <button type="submit">submit</button>
+
+                <button className={"btn"} type="submit">submit</button>
+                </div>
             </form>
         );
     } else {
@@ -94,20 +98,23 @@ const AddHorse = () => {
         return (
             <form onSubmit={handleSubmit}>
                 <FormTop/>
-                <div>
+                <div className={"right"}>
+                <div className={"field"}>
                     <label htmlFor="breed">Race: *<br></br></label>
                     <select id="breed" required><option>Chargement...</option></select>
                 </div>
-                <div>
+                <div className={"field"}>
                     <label htmlFor="breeder">Eleveur:<br></br></label>
                     <select id="breeder" name="breeder"><option>Chargement...</option></select>
                 </div>
-                <div>
+                <div className={"field"}>
                     <label htmlFor="coat">Robe: *<br></br></label>
                     <select id="coat" name="coat" required><option>Chargement...</option></select>
                 </div>
                 <FormBot/>
-                <button type="submit">submit</button>
+
+                <button className={"btn"} type="submit">submit</button>
+                </div>
             </form>
         );
     }
@@ -116,16 +123,16 @@ const AddHorse = () => {
 
 const FormTop = () => {
     return (
-        <div>
-            <div>
+        <div className={"left"}>
+            <div className={"field"}>
                 <label htmlFor="photo">Photo:<br></br></label>
                 <input id="photo" name="photo" type="file"></input>
             </div>
-            <div>
+            <div className={"field"}>
                 <label htmlFor="name">Nom: *<br></br></label>
                 <input id="name" name="name" type="text" required></input>
             </div>
-            <div>
+            <div className={"field"}>
                 <label>Sexe*:<br></br>
                     <label htmlFor="male">M</label>
                     <input id="male" name="gender" type="radio" value="Male" required></input>
@@ -133,9 +140,13 @@ const FormTop = () => {
                     <input id="female" name="gender" type="radio" value="Female"></input>
                 </label>
             </div>
-            <div>
+            <div className={"field"}>
                 <label htmlFor="birth">Date de naissance: *<br></br></label>
                 <input id="birth" name="birthdate" type="date" required></input>
+            </div>
+            <div className={"field"}>
+                <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
+                <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
             </div>
         </div>
     );
@@ -144,11 +155,11 @@ const FormTop = () => {
 const FormBot = () => {
     return (
         <div>
-            <div>
+            <div className={"field"}>
                 <label htmlFor="height">Hauteur(cm): *<br></br></label>
                 <input id="height" name="height" type="number" required></input>
             </div>
-            <div>
+            <div className={"field"}>
                 <label htmlFor="statut">Statut: *<br></br></label>
                 <select id="statut" name="statut" required>
                     <option value="elev">Élevage</option>
@@ -156,10 +167,6 @@ const FormBot = () => {
                     <option value="manege">Manege</option>
                     <option value="other">Autre</option>
                 </select>
-            </div>
-            <div>
-                <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
-                <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
             </div>
         </div>
     );
@@ -210,37 +217,30 @@ function verifs(params) {
         }
     }
     //Verif name
-    if (params.name.value.length > 50 || params.name.value.length < 3) {
+    if (params.name.value.length > 100 || params.name.value.length < 1) {
         document.getElementById("name").style.backgroundColor = "red";
         console.log("Name is too long or too short");
         return false;
-    } else {
-        console.log("Name is ok");
     }
     //Verif height
-    if (params.height.value > 350 || params.height.value < 50) {
+    if (params.height.value > 500 || params.height.value < 20) {
         document.getElementById("height").style.backgroundColor = "red";
-        console.log("Height is too long");
+        console.log("Height is too big or too small");
         return false;
-    } else {
-        console.log("Height is ok");
     }
     //Verif comment
     document.getElementById("comment").style.backgroundColor = "red";
-    if (params.comment.value.length > 500) {
+    if (params.comment.value.length > 500000) {
         console.log("Comment is too long");
         return false;
-    } else {
-        console.log("Comment is ok");
     }
     //Verif Date
     if (params.date.value > new Date()) {
         document.getElementById("date").style.backgroundColor = "red";
         console.log("Date is in the future");
         return false;
-    } else {
-        console.log("Date is ok");
     }
+    console.log("Vérifications ok")
     return true;
 }
 
