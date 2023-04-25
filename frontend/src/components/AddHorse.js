@@ -1,5 +1,6 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../css/Abonnement.css';
+import parse from 'html-react-parser'
 
 
 const AddHorse = () => {
@@ -11,37 +12,48 @@ const AddHorse = () => {
     const [coatdata, setcoat] = useState([])
 
     const fetchBreeds = () => {
-        console.log("fetching breeds")
         fetch("http://localhost:3000/api/horse/breed")
             .then(response => {
-                return response.json()
+                if(response.ok){
+                    return response.json()
+                }throw new Error("There has been a problem with your fetch operation")
             })
             .then(data => {
-                setBreedLoaded(true)
                 setbreed(data)
-            })
+                setBreedLoaded(true)
+            }).catch((error) => {
+            console.log('error: ' + error);
+            });
     }
 
     const fetchBreeders = () => {
         fetch("http://localhost:3000/api/horse/breeder")
             .then(response => {
-                return response.json()
+                if(response.ok){
+                    return response.json()
+                }throw new Error("There has been a problem with your fetch operation")
             })
             .then(data => {
-                setBreederLoaded(true)
                 setbreeder(data)
-            })
+                setBreederLoaded(true)
+            }).catch((error) => {
+            console.log('error: ' + error);
+        });
     }
 
     const fetchCoats = () => {
         fetch("http://localhost:3000/api/horse/coat")
             .then(response => {
-                return response.json()
+                if(response.ok){
+                    return response.json()
+                }throw new Error("There has been a problem with your fetch operation")
             })
             .then(data => {
-                setCoatLoaded(true)
                 setcoat(data)
-            })
+                setCoatLoaded(true)
+            }).catch((error) => {
+            console.log('error: ' + error);
+        });
     }
 
     useEffect(() => {
@@ -56,63 +68,24 @@ const AddHorse = () => {
         console.log(event)
     }
 
-
-
     if (breedLoaded && breederLoaded && coatLoaded) {
         console.log("rendering")
         return (
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="photo">Photo:<br></br></label>
-                    <input id="photo" name="photo" type="file"></input>
-
-                </div>
-                <div>
-                    <label htmlFor="name">Nom: *<br></br></label>
-                    <input id="name" name="name" type="text" required></input>
-
-                </div>
-                <div>
-                    <label>Sexe*:<br></br>
-                        <label htmlFor="male">M</label>
-                        <input id="male" name="gender" type="radio" value="Male" required></input>
-                        <label htmlFor="female">F</label>
-                        <input id="female" name="gender" type="radio" value="Female"></input>
-                    </label>
-                </div>
-                <div>
-                    <label htmlFor="birth">Date de naissance: *<br></br></label>
-                    <input id="birth" name="birthdate" type="date" required></input>
-                </div>
+                <FormTop/>
                 <div>
                     <label htmlFor="breed">Race: *<br></br></label>
-                    <select id="breed" required></select>
+                    <select id="breed" required><BreedDisplay breeddata={breeddata}/></select>
                 </div>
                 <div>
                     <label htmlFor="breeder">Eleveur:<br></br></label>
-                    <select id="breeder" name="breeder"></select>
+                    <select id="breeder" name="breeder"><BreederDisplay breederdata={breederdata}/></select>
                 </div>
                 <div>
                     <label htmlFor="coat">Robe: *<br></br></label>
-                    <CoatsDisplay coatdata={coatdata}/>
+                    <select id="coat" name="coat" required><CoatsDisplay coatdata={coatdata}/></select>
                 </div>
-                <div>
-                    <label htmlFor="height">Hauteur(cm): *<br></br></label>
-                    <input id="height" name="height" type="number" required></input>
-                </div>
-                <div>
-                    <label htmlFor="statut">Statut: *<br></br></label>
-                    <select id="statut" name="statut" required>
-                        <option value="elev">Élevage</option>
-                        <option value="compet">Competition</option>
-                        <option value="manege">Manege</option>
-                        <option value="other">Autre</option>
-                    </select>
-                </div>
-                <div>
-                    <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
-                    <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
-                </div>
+                <FormBot/>
                 <button type="submit">submit</button>
             </form>
         );
@@ -120,57 +93,20 @@ const AddHorse = () => {
         console.log("wow")
         return (
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="photo">Photo:<br></br></label>
-                    <input id="photo" name="photo" type="file"></input>
-
-                </div>
-                <div>
-                    <label htmlFor="name">Nom: *<br></br></label>
-                    <input id="name" name="name" type="text" required></input>
-
-                </div>
-                <div>
-                    <label>Sexe*:<br></br>
-                        <label htmlFor="male">M</label>
-                        <input id="male" name="gender" type="radio" value="Male" required></input>
-                        <label htmlFor="female">F</label>
-                        <input id="female" name="gender" type="radio" value="Female"></input>
-                    </label>
-                </div>
-                <div>
-                    <label htmlFor="birth">Date de naissance: *<br></br></label>
-                    <input id="birth" name="birthdate" type="date" required></input>
-                </div>
+                <FormTop/>
                 <div>
                     <label htmlFor="breed">Race: *<br></br></label>
-                    <select id="breed" required></select>
+                    <select id="breed" required><option>Chargement...</option></select>
                 </div>
                 <div>
                     <label htmlFor="breeder">Eleveur:<br></br></label>
-                    <select id="breeder" name="breeder"></select>
+                    <select id="breeder" name="breeder"><option>Chargement...</option></select>
                 </div>
                 <div>
                     <label htmlFor="coat">Robe: *<br></br></label>
-                    <select id="coat" name="coat" required></select>
+                    <select id="coat" name="coat" required><option>Chargement...</option></select>
                 </div>
-                <div>
-                    <label htmlFor="height">Hauteur(cm): *<br></br></label>
-                    <input id="height" name="height" type="number" required></input>
-                </div>
-                <div>
-                    <label htmlFor="statut">Statut: *<br></br></label>
-                    <select id="statut" name="statut" required>
-                        <option value="elev">Élevage</option>
-                        <option value="compet">Competition</option>
-                        <option value="manege">Manege</option>
-                        <option value="other">Autre</option>
-                    </select>
-                </div>
-                <div>
-                    <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
-                    <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
-                </div>
+                <FormBot/>
                 <button type="submit">submit</button>
             </form>
         );
@@ -178,23 +114,70 @@ const AddHorse = () => {
 }
 
 
+const FormTop = () => {
+    return (
+        <div>
+            <div>
+                <label htmlFor="photo">Photo:<br></br></label>
+                <input id="photo" name="photo" type="file"></input>
+            </div>
+            <div>
+                <label htmlFor="name">Nom: *<br></br></label>
+                <input id="name" name="name" type="text" required></input>
+            </div>
+            <div>
+                <label>Sexe*:<br></br>
+                    <label htmlFor="male">M</label>
+                    <input id="male" name="gender" type="radio" value="Male" required></input>
+                    <label htmlFor="female">F</label>
+                    <input id="female" name="gender" type="radio" value="Female"></input>
+                </label>
+            </div>
+            <div>
+                <label htmlFor="birth">Date de naissance: *<br></br></label>
+                <input id="birth" name="birthdate" type="date" required></input>
+            </div>
+        </div>
+    );
+}
+
+const FormBot = () => {
+    return (
+        <div>
+            <div>
+                <label htmlFor="height">Hauteur(cm): *<br></br></label>
+                <input id="height" name="height" type="number" required></input>
+            </div>
+            <div>
+                <label htmlFor="statut">Statut: *<br></br></label>
+                <select id="statut" name="statut" required>
+                    <option value="elev">Élevage</option>
+                    <option value="compet">Competition</option>
+                    <option value="manege">Manege</option>
+                    <option value="other">Autre</option>
+                </select>
+            </div>
+            <div>
+                <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
+                <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+            </div>
+        </div>
+    );
+}
+
 const CoatsDisplay = (props) => {
-    //console.log(props.breeddata)
-    //console.log(props.breederdata)
-    console.log(props.coatdata)
-
     let coatOptions = props.coatdata.map(coat => coat.coat)
-    console.log(coatOptions)
-    return <select id="coat" name="coat" required>{coatOptions}</select>
+    return coatOptions.map(string => parse(string))
+}
 
-    //const coatOptions = data.coat.map(item => item.coat).join("");
-    //console.log(coatOptions)
-    /*
-    for (let i in data.breeds) {
-        return i.breed
-    }
+const BreedDisplay = (props) => {
+    let breedOptions = props.breeddata.map(breed => breed.breed)
+    return breedOptions.map(string => parse(string))
+}
 
-     */
+const BreederDisplay = (props) => {
+    let breederOptions = props.breederdata.map(breeder => breeder.breeder)
+    return breederOptions.map(string => parse(string))
 }
 
 function submit(params) {
@@ -259,67 +242,6 @@ function verifs(params) {
         console.log("Date is ok");
     }
     return true;
-}
-
-const page = (props) => {
-    return (
-        <form onSubmit='return submit(this);'>
-            <p>
-                <label htmlFor="photo">Photo:<br></br></label>
-                <input id="photo" name="photo" type="file"></input>
-
-            </p>
-            <p>
-                <label htmlFor="name">Nom: *<br></br></label>
-                <input id="name" name="name" type="text" required></input>
-
-            </p>
-            <p>
-                <label>Sexe*:<br></br>
-                    <label htmlFor="male">M</label>
-                    <input id="male" name="gender" type="radio" value="Male" required></input>
-                    <label htmlFor="female">F</label>
-                    <input id="female" name="gender" type="radio" value="Female"></input>
-                </label>
-            </p>
-            <p>
-                <label htmlFor="birth">Date de naissance: *<br></br></label>
-                <input id="birth" name="birthdate" type="date" required></input>
-            </p>
-            <p>
-                <label htmlFor="breed">Race: *<br></br></label>
-                <select id="breed" required></select>
-            </p>
-            <p>
-                <label htmlFor="breeder">Eleveur:<br></br></label>
-                <select id="breeder" name="breeder"></select>
-            </p>
-            <p>
-                <label htmlFor="coat">Robe: *<br></br></label>
-                <select id="coat" name="coat" required>
-                    <coats/>
-                </select>
-            </p>
-            <p>
-                <label htmlFor="height">Hauteur(cm): *<br></br></label>
-                <input id="height" name="height" type="number" required></input>
-            </p>
-            <p>
-                <label htmlFor="statut">Statut: *<br></br></label>
-                <select id="statut" name="statut" required>
-                    <option value="elev">Élevage</option>
-                    <option value="compet">Competition</option>
-                    <option value="manege">Manege</option>
-                    <option value="other">Autre</option>
-                </select>
-            </p>
-            <p>
-                <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
-                <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
-            </p>
-            <button type="submit">submit</button>
-        </form>
-    )
 }
 
 
