@@ -21,6 +21,7 @@ const Abonnement = () => {
     },[])
 
     if(isLoaded){
+        console.log("slt")
         return (
             <div className={"top-container"}>
                 <div className={"top-left"}>

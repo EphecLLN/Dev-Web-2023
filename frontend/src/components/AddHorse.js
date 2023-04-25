@@ -1,60 +1,67 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import '../css/Abonnement.css';
 
 
 const AddHorse = () => {
-    let isLoaded = 0;
-    const data = {}
+    const [breedLoaded, setBreedLoaded] = useState(false)
+    const [breederLoaded, setBreederLoaded] = useState(false)
+    const [coatLoaded, setCoatLoaded] = useState(false)
+    const [breeddata, setbreed] = useState([])
+    const [breederdata, setbreeder] = useState([])
+    const [coatdata, setcoat] = useState([])
+
     const fetchBreeds = () => {
         console.log("fetching breeds")
         fetch("http://localhost:3000/api/horse/breed")
             .then(response => {
-                console.log(response)
-                return response
+                return response.json()
             })
-            .then(res => {
-                isLoaded++;
-                console.log(res)
-                console.log(res)
+            .then(data => {
+                setBreedLoaded(true)
+                setbreed(data)
             })
     }
 
     const fetchBreeders = () => {
         fetch("http://localhost:3000/api/horse/breeder")
             .then(response => {
-                return response
+                return response.json()
             })
-            .then(res => {
-                isLoaded++;
-                data.breeders = res;
+            .then(data => {
+                setBreederLoaded(true)
+                setbreeder(data)
             })
     }
 
     const fetchCoats = () => {
         fetch("http://localhost:3000/api/horse/coat")
             .then(response => {
-                return response
+                return response.json()
             })
-            .then(res => {
-                isLoaded++;
-                data.coats = data;
+            .then(data => {
+                setCoatLoaded(true)
+                setcoat(data)
             })
     }
 
-
+    useEffect(() => {
         fetchBreeds()
         fetchBreeders()
         fetchCoats()
+    }, [])
 
-    handleSubmit(event){
-        alert('A name was submitted: ' + this.state.value);
-        event.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        console.log("submitting");
+        console.log(event)
     }
 
 
-    if (isLoaded === 3) {
+
+    if (breedLoaded && breederLoaded && coatLoaded) {
+        console.log("rendering")
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="photo">Photo:<br></br></label>
                     <input id="photo" name="photo" type="file"></input>
@@ -87,7 +94,7 @@ const AddHorse = () => {
                 </div>
                 <div>
                     <label htmlFor="coat">Robe: *<br></br></label>
-                    <select id="coat" name="coat" required><coats/></select>
+                    <CoatsDisplay coatdata={coatdata}/>
                 </div>
                 <div>
                     <label htmlFor="height">Hauteur(cm): *<br></br></label>
@@ -110,8 +117,9 @@ const AddHorse = () => {
             </form>
         );
     } else {
+        console.log("wow")
         return (
-            <form onSubmit='return submit(this);'>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="photo">Photo:<br></br></label>
                     <input id="photo" name="photo" type="file"></input>
@@ -169,6 +177,25 @@ const AddHorse = () => {
     }
 }
 
+
+const CoatsDisplay = (props) => {
+    //console.log(props.breeddata)
+    //console.log(props.breederdata)
+    console.log(props.coatdata)
+
+    let coatOptions = props.coatdata.map(coat => coat.coat)
+    console.log(coatOptions)
+    return <select id="coat" name="coat" required>{coatOptions}</select>
+
+    //const coatOptions = data.coat.map(item => item.coat).join("");
+    //console.log(coatOptions)
+    /*
+    for (let i in data.breeds) {
+        return i.breed
+    }
+
+     */
+}
 
 function submit(params) {
     if (verifs(params)) {
@@ -269,7 +296,9 @@ const page = (props) => {
             </p>
             <p>
                 <label htmlFor="coat">Robe: *<br></br></label>
-                <select id="coat" name="coat" required><coats/></select>
+                <select id="coat" name="coat" required>
+                    <coats/>
+                </select>
             </p>
             <p>
                 <label htmlFor="height">Hauteur(cm): *<br></br></label>
@@ -294,9 +323,4 @@ const page = (props) => {
 }
 
 
-const coats = (props) => {
-    return (
-        <p>slt</p>
-    );
-}
 export default AddHorse;
