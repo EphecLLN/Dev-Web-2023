@@ -10,6 +10,18 @@ const AddHorse = () => {
     const [breeddata, setbreed] = useState([])
     const [breederdata, setbreeder] = useState([])
     const [coatdata, setcoat] = useState([])
+    const [formData, setFormData] = useState({
+        photo: "",
+        hname: "",
+        gender: "Male",
+        birthdate: "",
+        breed: false,
+        breeder: false,
+        coat: false,
+        height: "",
+        statut: "elev",
+        comment: "",
+    });
 
     const fetchBreeds = () => {
         fetch("http://localhost:3000/api/horse/breed")
@@ -62,33 +74,89 @@ const AddHorse = () => {
         fetchCoats()
     }, [])
 
+    const handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const name = target.name;
+
+        setFormData({ ...formData, [name]: value });
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault()
-        verifs(event)
-        console.log("submitting");
-        console.log(event)
+        console.log(formData)
+        if(verifs(formData)){
+            console.log("Send")
+        }
     }
 
     if (breedLoaded && breederLoaded && coatLoaded) {
         console.log("rendering")
         return (
             <form onSubmit={handleSubmit}>
-                <FormTop/>
+                <div className={"left"}>
+                    <div className={"field"}>
+                        <label htmlFor="photo">Photo:<br></br></label>
+                        <input id="photo" name="photo" type="file"></input>
+                    </div>
+                    <div className={"field"}>
+                        <label htmlFor="hname">Nom: *<br></br></label>
+                        <input id="hname" name="hname" type="text" value={formData.hname} onChange={handleInputChange} required/>
+                    </div>
+                    <div className={"field"}>
+                        <label>Sexe*:<br></br>
+                            <label htmlFor="male">M</label>
+                            <input id="male" name="gender" type="radio" value="Male" checked={formData.gender === "Male"} onChange={handleInputChange} required/>
+                            <label htmlFor="female">F</label>
+                            <input id="female" name="gender" type="radio" value="Female" checked={formData.gender === "Female"} onChange={handleInputChange}/>
+                        </label>
+                    </div>
+                    <div className={"field"}>
+                        <label htmlFor="birth">Date de naissance: *<br></br></label>
+                        <input id="birth" name="birthdate" type="date" value={formData.birthdate} onChange={handleInputChange} required/>
+                    </div>
+                    <div className={"field"}>
+                        <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
+                        <textarea id="comment" name="comment" rows="4" cols="50" value={formData.comment} onChange={handleInputChange}></textarea>
+                    </div>
+                </div>
                 <div className={"right"}>
                 <div className={"field"}>
                     <label htmlFor="breed">Race: *<br></br></label>
-                    <select id="breed" required><BreedDisplay breeddata={breeddata}/></select>
+                    <select id="breed" name="breed" value={formData.breed} onChange={handleInputChange} required>
+                        <option value={false}>Non selectionnée</option>
+                        <BreedDisplay breeddata={breeddata}/>
+                    </select>
                 </div>
                 <div className={"field"}>
                     <label htmlFor="breeder">Eleveur:<br></br></label>
-                    <select id="breeder" name="breeder"><BreederDisplay breederdata={breederdata}/></select>
+                    <select id="breeder" name="breeder" value={formData.breeder} onChange={handleInputChange}>
+                        <option value={false}>Non sélectionné</option>
+                        <BreederDisplay breederdata={breederdata}/>
+                    </select>
                 </div>
                 <div className={"field"}>
                     <label htmlFor="coat">Robe: *<br></br></label>
-                    <select id="coat" name="coat" required><CoatsDisplay coatdata={coatdata}/></select>
+                    <select id="coat" name="coat" value={formData.coat} onChange={handleInputChange} required>
+                        <option value={false}>Non selectionnée</option>
+                        <CoatsDisplay coatdata={coatdata}/>
+                    </select>
                 </div>
-                <FormBot/>
-
+                    <div>
+                        <div className={"field"}>
+                            <label htmlFor="height">Hauteur(cm): *<br></br></label>
+                            <input id="height" name="height" type="number" value={formData.height} onChange={handleInputChange} required></input>
+                        </div>
+                        <div className={"field"}>
+                            <label htmlFor="statut">Statut: *<br></br></label>
+                            <select id="statut" name="statut" required value={formData.statut} onChange={handleInputChange}>
+                                <option value="elev">Élevage</option>
+                                <option value="compet">Competition</option>
+                                <option value="manege">Manege</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                    </div>
                 <button className={"btn"} type="submit">submit</button>
                 </div>
             </form>
@@ -112,7 +180,6 @@ const AddHorse = () => {
                     <select id="coat" name="coat" required><option>Chargement...</option></select>
                 </div>
                 <FormBot/>
-
                 <button className={"btn"} type="submit">submit</button>
                 </div>
             </form>
@@ -121,7 +188,7 @@ const AddHorse = () => {
 }
 
 
-const FormTop = () => {
+const FormTop = (props) => {
     return (
         <div className={"left"}>
             <div className={"field"}>
@@ -207,38 +274,48 @@ function submit(params) {
 
 function verifs(params) {
     //Verif Photo
-    if (params.photo.value !== undefined) {
-        let parts = params.photo.value.split('.');
+    if (params.photo !== "") {
+        let parts = params.photo.split('.');
         let fileSize = params.photo.files[0].size / 1024 / 1024; // in MiB
         if (fileSize > 8 || !["png", "jpg"].includes(parts[parts.length - 1])) {
             document.getElementById("photo").style.backgroundColor = "red";
             console.log("Photo is too big or not a png or jpg");
             return false;
         }
+    }else{
+        document.getElementById("photo").style.backgroundColor = "white";
     }
     //Verif name
-    if (params.name.value.length > 100 || params.name.value.length < 1) {
-        document.getElementById("name").style.backgroundColor = "red";
+    if (params.hname.length > 100 || params.hname.length < 1) {
+        document.getElementById("hname").style.backgroundColor = "red";
         console.log("Name is too long or too short");
         return false;
+    }else{
+        document.getElementById("hname").style.backgroundColor = "white";
     }
     //Verif height
-    if (params.height.value > 500 || params.height.value < 20) {
+    if (params.height > 500 || params.height < 20) {
         document.getElementById("height").style.backgroundColor = "red";
         console.log("Height is too big or too small");
         return false;
+    }else{
+        document.getElementById("height").style.backgroundColor = "white";
     }
     //Verif comment
-    document.getElementById("comment").style.backgroundColor = "red";
-    if (params.comment.value.length > 500000) {
+    if (params.comment.length > 500000) {
+        document.getElementById("comment").style.backgroundColor = "red";
         console.log("Comment is too long");
         return false;
+    }else{
+        document.getElementById("comment").style.backgroundColor = "white";
     }
     //Verif Date
-    if (params.date.value > new Date()) {
-        document.getElementById("date").style.backgroundColor = "red";
+    if (params.date > new Date()) {
+        document.getElementById("birth").style.backgroundColor = "red";
         console.log("Date is in the future");
         return false;
+    }else{
+        document.getElementById("birth").style.backgroundColor = "white";
     }
     console.log("Vérifications ok")
     return true;
