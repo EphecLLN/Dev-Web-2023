@@ -57,22 +57,21 @@ exports.breeder = (req, res, next) => {
         })
 }
 
-exports.addHorse = (req, res, next) => {
+exports.getHorses = (req, res, next) => {
     pool.getConnection()
         .then(conn => {
-            conn.query(`CALL newHorse(?,?,?,?,?,?,?,?,?,?);`,[req.body.hname, req.body.photo, req.body.gender, req.body.birthdate, req.body.breed, req.body.height, req.body.statut, req.body.comment, req.body.breeder, req.body.coat] )
+            conn.query("CALL getHorses()")
                 .then(rows => {
-                    res.status(200).json();
+                    console.log("Calling breederOptions");
+                    res.status(200).json(rows[0]);
                 })
                 .catch(err => {
-                        console.log(err);
                         res.status(400).json({err});
                     }
                 )
-            conn.release();
+            conn.release()
         })
         .catch(err => {
             res.status(400).json({err});
         })
 }
-

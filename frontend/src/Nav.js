@@ -18,14 +18,14 @@ class Nav extends React.Component{
                 <ul id="ul-nav">
                     <li className="nav"><Link to='/' className="acceuil">Acceuil</Link></li>
                     <li className="nav"><Link to='/calendrier' className="calendrier">Calendrier</Link></li>
-                    <li className="nav"><Link to='/addhorse' className="chevaux">Chevaux</Link></li>
+                    <li className="nav"><Link to='/Chevaux' className="chevaux">Chevaux</Link></li>
                     <li className="nav"><Link to='/abonnement' className="abonnement">Abonnement</Link></li>
                 </ul>
                 </nav>
                 <Routes>
                     <Route exact path="/" element={<Home />} />
                     <Route path="/calendrier" element={<Calendrier/>} />
-                    <Route path="/addhorse" element={<AddHorse />} />
+                    <Route path="/Chevaux" element={<Chevaux />} />
                     <Route path="/abonnement" element={<Abonnement />} />
                 </Routes>
             </div>
