@@ -7,5 +7,6 @@ const pool = require("../db");
 router.get('/coat', userCtrl.coat);
 router.get('/breed', userCtrl.breed);
 router.get('/breeder', userCtrl.breeder);
+router.post('/addHorse', userCtrl.addHorse);
 
 module.exports = router;

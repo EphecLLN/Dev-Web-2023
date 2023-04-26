@@ -101,71 +101,52 @@ const AddHorse = () => {
 
     const handleSubmit = (event) => {
         const formFields = event.target.elements;
-        formData.photo = formFields.photo.files[0]
+        if(formFields.photo.files[0] !== undefined){
+            formData.photo = formFields.photo.files[0]
+        }
         formData.hname = formFields.hname.value
         formData.gender = formFields.gender.value
         formData.birthdate = new Date(formFields.birthdate.value).toISOString().slice(0, 19).replace('T', ' ')
-        formData.breed = formFields.breed.value
-        formData.breeder = Number(formFields.breeder.value)
-        formData.coat = formFields.coat.value
+        formData.breed = Number(formFields.breed.value)
+        if (formFields.breeder.value === null) {
+            formData.breeder = null
+        } else {
+            formData.breeder = Number(formFields.breeder.value)
+        }
+        formData.coat = Number(formFields.coat.value)
         formData.height = Number(formFields.height.value)
         formData.statut = formFields.statut.value
         formData.comment = formFields.comment.value
 
         console.log(formData)
-        let isok = false
+        let isok = true
         event.preventDefault()
         console.log(formData)
         if (verifications(formData) && isok === true) {
-            //newHorse( name varchar(100),  picture varchar(100), gender varchar(100),  birthdate DATE, breed varchar(100),  height INT, status varchar(100),  comment mediumtext, breederId INT,  coat varchar(100))
-            fetch(`CALL ${formData.hname},  ${formData.photo}, ${formData.gender},  ${formData.birthdate}, ${formData.breed},  ${formData.height}, ${formData.statut},  ${formData.comment}, ${formData.breeder},  ${formData.coat})`)
-                .then(response => {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    throw new Error("There has been a problem with the post operation")
-                })
-                .then(data => {
-
-                }).catch((error) => {
-                console.log('error: ' + error);
-            });
+            formData.photo = formData.photo.name
+            fetch("http://localhost:3000/api/horse/addHorse", {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(() => {
+                success()
+            })
         } else {
             console.log("Error")
         }
     }
 
+    const success = () => {
+        console.log("success")
+    }
 
     if (isLoaded.breed && isLoaded.breeder && isLoaded.coat) {
         console.log("rendering")
         return (
             <form onSubmit={handleSubmit}>
-                <div className={"left"}>
-                    <div className={"field"}>
-                        <label htmlFor="photo">Photo: (png ou jpg)<br/></label>
-                        <input id="photo" name="photo" type="file"/>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="hname">Nom: *<br></br></label>
-                        <input id="hname" name="hname" type="text" required/>
-                    </div>
-                    <div className={"field"}>
-                        <label>Sexe*:<br></br>
-                            <label htmlFor="male">M</label>
-                            <input id="male" name="gender" type="radio" value="Male" required/>
-                            <label htmlFor="female">F</label>
-                            <input id="female" name="gender" type="radio" value="Female"/>
-                        </label>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="birth">Date de naissance: *<br/></label>
-                        <input id="birth" name="birthdate" type="date" required/>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="comment">Besoins médicaux / Commentaire<br/></label>
-                        <textarea id="comment" name="comment" rows="4" cols="50" />
-                    </div>
-                </div>
+                <FormTop/>
                 <div className={"right"}>
                     <div className={"field"}>
                         <label htmlFor="breed">Race: *<br/></label>
@@ -175,8 +156,8 @@ const AddHorse = () => {
                     </div>
                     <div className={"field"}>
                         <label htmlFor="breeder">Eleveur:<br/></label>
-                        <select id="breeder" name="breeder" >
-                            <option value={"none"}>Aucun</option>
+                        <select id="breeder" name="breeder">
+                            <option value={null}>Aucun</option>
                             <OptionsDisplay data={fetchData} opt={"breeder"}/>
                         </select>
                     </div>
@@ -186,19 +167,7 @@ const AddHorse = () => {
                             <OptionsDisplay data={fetchData} opt={"coat"}/>
                         </select>
                     </div>
-                    <div className={"field"}>
-                        <label htmlFor="height">Hauteur(cm): *<br/></label>
-                        <input id="height" name="height" type="number" required/>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="statut">Statut: *<br/></label>
-                        <select id="statut" name="statut" required value={formData.statut}>
-                            <option value="elev">Élevage</option>
-                            <option value="compet">Competition</option>
-                            <option value="manege">Manege</option>
-                            <option value="other">Autre</option>
-                        </select>
-                    </div>
+                    <FormBot/>
                     <button className={"btn"} type="submit">submit</button>
                 </div>
             </form>
@@ -207,32 +176,7 @@ const AddHorse = () => {
         console.log("wow")
         return (
             <form onSubmit={handleSubmit}>
-                <div className={"left"}>
-                    <div className={"field"}>
-                        <label htmlFor="photo">Photo: (png ou jpg)<br/></label>
-                        <input id="photo" name="photo" type="file"/>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="hname">Nom: *<br></br></label>
-                        <input id="hname" name="hname" type="text" required/>
-                    </div>
-                    <div className={"field"}>
-                        <label>Sexe*:<br></br>
-                            <label htmlFor="male">M</label>
-                            <input id="male" name="gender" type="radio" value="Male" required/>
-                            <label htmlFor="female">F</label>
-                            <input id="female" name="gender" type="radio" value="Female"/>
-                        </label>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="birth">Date de naissance: *<br/></label>
-                        <input id="birth" name="birthdate" type="date" required/>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="comment">Besoins médicaux / Commentaire<br/></label>
-                        <textarea id="comment" name="comment" rows="4" cols="50" />
-                    </div>
-                </div>
+                <FormTop/>
                 <div className={"right"}>
                     <div className={"field"}>
                         <label htmlFor="breed">Race: *<br/></label>
@@ -242,7 +186,7 @@ const AddHorse = () => {
                     </div>
                     <div className={"field"}>
                         <label htmlFor="breeder">Eleveur:<br/></label>
-                        <select id="breeder" name="breeder" >
+                        <select id="breeder" name="breeder">
                             <option value={"none"}>Chargement...</option>
                         </select>
                     </div>
@@ -252,19 +196,7 @@ const AddHorse = () => {
                             <option value={"none"}>Chargement...</option>
                         </select>
                     </div>
-                    <div className={"field"}>
-                        <label htmlFor="height">Hauteur(cm): *<br/></label>
-                        <input id="height" name="height" type="number" required/>
-                    </div>
-                    <div className={"field"}>
-                        <label htmlFor="statut">Statut: *<br/></label>
-                        <select id="statut" name="statut" required value={formData.statut}>
-                            <option value="elev">Élevage</option>
-                            <option value="compet">Competition</option>
-                            <option value="manege">Manege</option>
-                            <option value="other">Autre</option>
-                        </select>
-                    </div>
+                    <FormBot/>
                     <button className={"btn"} type="submit">submit</button>
                 </div>
             </form>
@@ -273,32 +205,32 @@ const AddHorse = () => {
 }
 
 
-const FormTop = (props) => {
+const FormTop = () => {
     return (
         <div className={"left"}>
             <div className={"field"}>
-                <label htmlFor="photo">Photo:<br></br></label>
-                <input id="photo" name="photo" type="file"></input>
+                <label htmlFor="photo">Photo: (png ou jpg)<br/></label>
+                <input id="photo" name="photo" type="file"/>
             </div>
             <div className={"field"}>
-                <label htmlFor="name">Nom: *<br></br></label>
-                <input id="name" name="name" type="text" required></input>
+                <label htmlFor="hname">Nom: *<br></br></label>
+                <input id="hname" name="hname" type="text" required/>
             </div>
             <div className={"field"}>
                 <label>Sexe*:<br></br>
                     <label htmlFor="male">M</label>
-                    <input id="male" name="gender" type="radio" value="Male" required></input>
+                    <input id="male" name="gender" type="radio" value="Male" required/>
                     <label htmlFor="female">F</label>
-                    <input id="female" name="gender" type="radio" value="Female"></input>
+                    <input id="female" name="gender" type="radio" value="Female"/>
                 </label>
             </div>
             <div className={"field"}>
-                <label htmlFor="birth">Date de naissance: *<br></br></label>
-                <input id="birth" name="birthdate" type="date" required></input>
+                <label htmlFor="birth">Date de naissance: *<br/></label>
+                <input id="birth" name="birthdate" type="date" required/>
             </div>
             <div className={"field"}>
-                <label htmlFor="comment">Besoins médicaux / Commentaire<br></br></label>
-                <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+                <label htmlFor="comment">Besoins médicaux / Commentaire<br/></label>
+                <textarea id="comment" name="comment" rows="4" cols="50"/>
             </div>
         </div>
     );
@@ -308,11 +240,11 @@ const FormBot = () => {
     return (
         <div>
             <div className={"field"}>
-                <label htmlFor="height">Hauteur(cm): *<br></br></label>
-                <input id="height" name="height" type="number" required></input>
+                <label htmlFor="height">Hauteur(cm): *<br/></label>
+                <input id="height" name="height" type="number" required/>
             </div>
             <div className={"field"}>
-                <label htmlFor="statut">Statut: *<br></br></label>
+                <label htmlFor="statut">Statut: *<br/></label>
                 <select id="statut" name="statut" required>
                     <option value="elev">Élevage</option>
                     <option value="compet">Competition</option>
@@ -339,35 +271,35 @@ function verifications(params) {
             return false;
         }
     } else {
-        document.getElementById("photo").className = "good";
+        document.getElementById("photo").classList.remove("wrong");
     }
     if (params.hname.length > 100 || params.hname.length < 1) { //Verif name
         document.getElementById("hname").className = "wrong";
         console.log("Name is too long or too short");
         return false;
     } else {
-        document.getElementById("hname").className = "good";
+        document.getElementById("hname").classList.remove("wrong");
     }
     if (new Date(params.birthdate) > new Date()) { //Verif Date
         document.getElementById("birth").className = "wrong";
         console.log("Date is in the future");
         return false;
     } else {
-        document.getElementById("birth").className = "good";
+        document.getElementById("birth").classList.remove("wrong");
     }
     if (params.height > 500 || params.height < 20) { //Verif height
         document.getElementById("height").className = "wrong";
         console.log("Height is too big or too small");
         return false;
     } else {
-        document.getElementById("height").className = "good";
+        document.getElementById("height").classList.remove("wrong");
     }
     if (params.comment.length > 500000) { //Verif comment
         document.getElementById("comment").className = "wrong";
         console.log("Comment is too long");
         return false;
     } else {
-        document.getElementById("comment").className = "good";
+        document.getElementById("comment").classList.remove("wrong");
     }
     console.log("Vérifications ok")
     return true;
