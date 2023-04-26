@@ -100,9 +100,13 @@ const AddHorse = () => {
     }, [])
 
     const handleSubmit = (event) => {
+        event.preventDefault()
+
         const formFields = event.target.elements;
         if(formFields.photo.files[0] !== undefined){
             formData.photo = formFields.photo.files[0]
+        }else{
+            formData.photo = null
         }
         formData.hname = formFields.hname.value
         formData.gender = formFields.gender.value
@@ -118,12 +122,12 @@ const AddHorse = () => {
         formData.statut = formFields.statut.value
         formData.comment = formFields.comment.value
 
+
         console.log(formData)
-        let isok = true
-        event.preventDefault()
-        console.log(formData)
-        if (verifications(formData) && isok === true) {
-            formData.photo = formData.photo.name
+        if (verifications(formData)) {
+            if(formData.photo !== null){
+                formData.photo = formData.photo.name
+            }
             fetch("http://localhost:3000/api/horse/addHorse", {
                 method: 'POST',
                 body: JSON.stringify(formData),
@@ -139,11 +143,13 @@ const AddHorse = () => {
     }
 
     const success = () => {
+        document.getElementById("button").style.display = "none"
+        document.getElementById("success").innerText = "Cheval ajouté avec succès à la base de données"
+        document.getElementById("success").style.backgroundColor = "rgba(149, 203, 148, 0.68)"
         console.log("success")
     }
 
     if (isLoaded.breed && isLoaded.breeder && isLoaded.coat) {
-        console.log("rendering")
         return (
             <form onSubmit={handleSubmit}>
                 <FormTop/>
@@ -168,12 +174,16 @@ const AddHorse = () => {
                         </select>
                     </div>
                     <FormBot/>
-                    <button className={"btn"} type="submit">submit</button>
+                    <div className={"blockbtn"}>
+                    <p>* Champs Obligatoires</p>
+                    <button id="button" className={"btn"} type="submit">Ajouter</button>
+                    </div>
+                    <div id="success">
+                    </div>
                 </div>
             </form>
         );
     } else {
-        console.log("wow")
         return (
             <form onSubmit={handleSubmit}>
                 <FormTop/>
@@ -197,13 +207,17 @@ const AddHorse = () => {
                         </select>
                     </div>
                     <FormBot/>
-                    <button className={"btn"} type="submit">submit</button>
+                    <div className={"blockbtn"}>
+                        <p>* Champs Obligatoires</p>
+                        <button id="button" className={"btn"} type="submit">Ajouter</button>
+                    </div>
+                    <div id="success">
+                    </div>
                 </div>
             </form>
         );
     }
 }
-
 
 const FormTop = () => {
     return (
@@ -262,7 +276,7 @@ const OptionsDisplay = (props) => {
 }
 
 function verifications(params) {
-    if (params.photo !== "") { //Verif Photo
+    if (params.photo !== null) { //Verif Photo
         let parts = params.photo.name.split('.');
         let fileSize = params.photo.size / 1024 / 1024; // in MiB
         if (fileSize > 8 || !["png", "jpg"].includes(parts[parts.length - 1])) {

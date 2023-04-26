@@ -56,7 +56,6 @@ exports.breeder = (req, res, next) => {
             res.status(400).json({err});
         })
 }
-//${req.body.hname}, ${req.body.photo}, ${req.body.gender}, ${req.body.birthdate}, ${req.body.breed}, ${req.body.height}, ${req.body.statut}, ${req.body.comment}, ${req.body.breeder}, ${req.body.coat}
 
 exports.addHorse = (req, res, next) => {
     pool.getConnection()
@@ -76,5 +75,4 @@ exports.addHorse = (req, res, next) => {
             res.status(400).json({err});
         })
 }
-
 
