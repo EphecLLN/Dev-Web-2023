@@ -14,7 +14,7 @@ const AddHorse = () => {
         breeder: [],
         coat: [],
     })
-    const [formData, setFormData] = useState({
+    const [formData] = useState({
         photo: "",
         hname: "",
         gender: "Male",
@@ -36,8 +36,8 @@ const AddHorse = () => {
                 throw new Error("There has been a problem with your fetch operation")
             })
             .then(data => {
-                setFetchData(prevState => ({ ...prevState, breed: data}));
-                setIsLoaded(prevState => ({ ...prevState, breed: true}));
+                setFetchData(prevState => ({...prevState, breed: data}));
+                setIsLoaded(prevState => ({...prevState, breed: true}));
             }).catch((error) => {
             console.log('error: ' + error);
         });
@@ -97,16 +97,16 @@ const AddHorse = () => {
         event.preventDefault()
 
         const formFields = event.target.elements;
-        if(formFields.photo.files[0] !== undefined){
+        if (formFields.photo.files[0] !== undefined) {
             formData.photo = formFields.photo.files[0]
-        }else{
+        } else {
             formData.photo = null
         }
         formData.hname = formFields.hname.value
         formData.gender = formFields.gender.value
         formData.birthdate = new Date(formFields.birthdate.value).toISOString().slice(0, 19).replace('T', ' ')
         formData.breed = Number(formFields.breed.value)
-        if (formFields.breeder.value === null) {
+        if (formFields.breeder.value === "null") {
             formData.breeder = null
         } else {
             formData.breeder = Number(formFields.breeder.value)
@@ -119,7 +119,7 @@ const AddHorse = () => {
 
         console.log(formData)
         if (verifications(formData)) {
-            if(formData.photo !== null){
+            if (formData.photo !== null) {
                 formData.photo = formData.photo.name
             }
             fetch("http://localhost:3000/api/horse/addHorse", {
@@ -157,7 +157,7 @@ const AddHorse = () => {
                     <div className={"field"}>
                         <label htmlFor="breeder">Eleveur:<br/></label>
                         <select id="breeder" name="breeder">
-                            <option value={null}>Aucun</option>
+                            <option value={"null"} selected="selected">Aucun</option>
                             <OptionsDisplay data={fetchData} opt={"breeder"}/>
                         </select>
                     </div>
@@ -169,8 +169,8 @@ const AddHorse = () => {
                     </div>
                     <FormBot/>
                     <div className={"blockbtn"}>
-                    <p>* Champs Obligatoires</p>
-                    <button id="button" className={"btn"} type="submit">Ajouter</button>
+                        <p>* Champs Obligatoires</p>
+                        <button id="button" className={"btn"} type="submit">Ajouter</button>
                     </div>
                     <div id="success">
                     </div>
