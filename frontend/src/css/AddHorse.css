@@ -32,3 +32,8 @@ form{
     width: 100px;
     border-radius: 2em;
 }
+
+.wrong{
+    background-color: #d91313;
+}
+
