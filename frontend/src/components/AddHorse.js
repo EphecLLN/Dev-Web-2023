@@ -36,14 +36,8 @@ const AddHorse = () => {
                 throw new Error("There has been a problem with your fetch operation")
             })
             .then(data => {
-                setFetchData(prevState => ({
-                    ...prevState,
-                    breed: data,
-                }));
-                setIsLoaded(prevState => ({
-                    ...prevState,
-                    breed: true,
-                }));
+                setFetchData(prevState => ({ ...prevState, breed: data}));
+                setIsLoaded(prevState => ({ ...prevState, breed: true}));
             }).catch((error) => {
             console.log('error: ' + error);
         });
