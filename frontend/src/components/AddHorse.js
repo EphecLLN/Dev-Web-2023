@@ -4,16 +4,8 @@ import '../css/AddHorse.css'
 
 
 const AddHorse = () => {
-    const [isLoaded, setIsLoaded] = useState({
-        breed: false,
-        breeder: false,
-        coat: false,
-    })
-    const [fetchData, setFetchData] = useState({
-        breed: [],
-        breeder: [],
-        coat: [],
-    })
+    const [fetchData, setfetchData] = useState([])
+    const [isLoaded, setIsLoaded] = useState(false)
     const [formData] = useState({
         photo: "",
         hname: "",
@@ -26,9 +18,8 @@ const AddHorse = () => {
         statut: "elev",
         comment: "",
     });
-
-    const fetchBreeds = () => {
-        fetch("http://localhost:3000/api/horse/breed")
+    const fetchOptions = (opt) => {
+        fetch("http://localhost:3000/api/horse/options")
             .then(response => {
                 if (response.ok) {
                     return response.json()
@@ -36,61 +27,15 @@ const AddHorse = () => {
                 throw new Error("There has been a problem with your fetch operation")
             })
             .then(data => {
-                setFetchData(prevState => ({...prevState, breed: data}));
-                setIsLoaded(prevState => ({...prevState, breed: true}));
-            }).catch((error) => {
-            console.log('error: ' + error);
-        });
-    }
-
-    const fetchBreeders = () => {
-        fetch("http://localhost:3000/api/horse/breeder")
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new Error("There has been a problem with your fetch operation")
-            })
-            .then(data => {
-                setFetchData(prevState => ({
-                    ...prevState,
-                    breeder: data,
-                }));
-                setIsLoaded(prevState => ({
-                    ...prevState,
-                    breeder: true,
-                }));
-            }).catch((error) => {
-            console.log('error: ' + error);
-        });
-    }
-
-    const fetchCoats = () => {
-        fetch("http://localhost:3000/api/horse/coat")
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new Error("There has been a problem with your fetch operation")
-            })
-            .then(data => {
-                setFetchData(prevState => ({
-                    ...prevState,
-                    coat: data,
-                }));
-                setIsLoaded(prevState => ({
-                    ...prevState,
-                    coat: true,
-                }));
+                setfetchData([data]);
+                setIsLoaded(true)
             }).catch((error) => {
             console.log('error: ' + error);
         });
     }
 
     useEffect(() => {
-        fetchBreeds()
-        fetchBreeders()
-        fetchCoats()
+        fetchOptions()
     }, [])
 
     const handleSubmit = (event) => {
@@ -143,7 +88,7 @@ const AddHorse = () => {
         console.log("success")
     }
 
-    if (isLoaded.breed && isLoaded.breeder && isLoaded.coat) {
+    if (isLoaded) {
         return (
             <form onSubmit={handleSubmit}>
                 <FormTop/>
@@ -265,8 +210,16 @@ const FormBot = () => {
 }
 
 const OptionsDisplay = (props) => {
-    let options = props.data[props.opt].map(coat => coat[props.opt])
-    return options.map(string => parse(string))
+    let html = ""
+    console.log(props.data)
+    if(props.data[0] !== undefined){
+    for(let i in Object.keys(props.data[0])){
+        if(props.data[0][i].source === props.opt){
+            html += props.data[0][i].option
+        }
+    }
+    }
+    return parse(html)
 }
 
 function verifications(params) {
@@ -312,6 +265,5 @@ function verifications(params) {
     console.log("Vérifications ok")
     return true;
 }
-
 
 export default AddHorse;

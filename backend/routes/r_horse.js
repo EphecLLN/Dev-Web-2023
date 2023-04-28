@@ -8,5 +8,6 @@ router.get('/coat', userCtrl.coat);
 router.get('/breed', userCtrl.breed);
 router.get('/breeder', userCtrl.breeder);
 router.post('/addHorse', userCtrl.addHorse);
+router.get('/options', userCtrl.options);
 
 module.exports = router;
