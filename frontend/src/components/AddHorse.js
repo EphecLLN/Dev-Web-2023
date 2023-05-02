@@ -7,13 +7,13 @@ const AddHorse = () => {
     const [fetchData, setfetchData] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
     const [formData] = useState({
-        photo: "",
+        photo: null,
         hname: "",
-        gender: "Male",
+        gender: "male",
         birthdate: "",
-        breed: false,
-        breeder: false,
-        coat: false,
+        breed: null,
+        breeder: null,
+        coat: null,
         height: "",
         statut: "elev",
         comment: "",
@@ -44,16 +44,12 @@ const AddHorse = () => {
         const formFields = event.target.elements;
         if (formFields.photo.files[0] !== undefined) {
             formData.photo = formFields.photo.files[0]
-        } else {
-            formData.photo = null
         }
         formData.hname = formFields.hname.value
         formData.gender = formFields.gender.value
-        formData.birthdate = new Date(formFields.birthdate.value).toISOString().slice(0, 19).replace('T', ' ')
+        formData.birthdate = formFields.birthdate.value
         formData.breed = Number(formFields.breed.value)
-        if (formFields.breeder.value === "null") {
-            formData.breeder = null
-        } else {
+        if (formFields.breeder.value !== "null") {
             formData.breeder = Number(formFields.breeder.value)
         }
         formData.coat = Number(formFields.coat.value)
@@ -61,28 +57,34 @@ const AddHorse = () => {
         formData.statut = formFields.statut.value
         formData.comment = formFields.comment.value
 
-
         console.log(formData)
-        if (verifications(formData)) {
-            if (formData.photo !== null) {
-                formData.photo = formData.photo.name
+        fetch("http://localhost:3000/api/horse/addHorse", {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
             }
-            fetch("http://localhost:3000/api/horse/addHorse", {
-                method: 'POST',
-                body: JSON.stringify(formData),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            }).then(() => {
-                success()
-            })
-        } else {
-            console.log("Error")
-        }
+        }).then(response => {
+            return response.json()
+        }).then(res => {
+            if (res.errormsg.length !== 0) {
+                errorDisplay(res.errormsg)
+            } else {
+                successDisplay()
+            }
+        })
     }
 
-    const success = () => {
-        document.getElementById("button").style.display = "none"
+    const errorDisplay = (errormsg) => {
+        for (let i in errormsg) {
+            console.log(errormsg[i]) //Ajouter sur la page les erreurs
+        }
+        //document.getElementById("error").innerText = "Erreur lors de l'ajout du cheval"
+        //document.getElementById("error").style.backgroundColor = "rgba(255, 0, 0, 0.68)"
+        console.log("error")
+    }
+    const successDisplay = () => {
+        //document.getElementById("button").style.display = "none"
         document.getElementById("success").innerText = "Cheval ajouté avec succès à la base de données"
         document.getElementById("success").style.backgroundColor = "rgba(149, 203, 148, 0.68)"
         console.log("success")
@@ -172,9 +174,9 @@ const FormTop = () => {
             <div className={"field"}>
                 <label>Sexe*:<br></br>
                     <label htmlFor="male">M</label>
-                    <input id="male" name="gender" type="radio" value="Male" required/>
+                    <input id="male" name="gender" type="radio" value="male" required/>
                     <label htmlFor="female">F</label>
-                    <input id="female" name="gender" type="radio" value="Female"/>
+                    <input id="female" name="gender" type="radio" value="female"/>
                 </label>
             </div>
             <div className={"field"}>
@@ -199,10 +201,10 @@ const FormBot = () => {
             <div className={"field"}>
                 <label htmlFor="statut">Statut: *<br/></label>
                 <select id="statut" name="statut" required>
-                    <option value="elev">Élevage</option>
-                    <option value="compet">Competition</option>
+                    <option value="elevage">Élevage</option>
+                    <option value="competition">Competition</option>
                     <option value="manege">Manege</option>
-                    <option value="other">Autre</option>
+                    <option value="autre">Autre</option>
                 </select>
             </div>
         </div>
@@ -211,59 +213,13 @@ const FormBot = () => {
 
 const OptionsDisplay = (props) => {
     let html = ""
-    console.log(props.data)
-    if(props.data[0] !== undefined){
-    for(let i in Object.keys(props.data[0])){
-        if(props.data[0][i].source === props.opt){
-            html += props.data[0][i].option
+    if (props.data[0] !== undefined) {
+        for (let i in Object.keys(props.data[0])) {
+            if (props.data[0][i].source === props.opt) {
+                html += props.data[0][i].option
+            }
         }
-    }
     }
     return parse(html)
 }
-
-function verifications(params) {
-    if (params.photo !== null) { //Verif Photo
-        let parts = params.photo.name.split('.');
-        let fileSize = params.photo.size / 1024 / 1024; // in MiB
-        if (fileSize > 8 || !["png", "jpg"].includes(parts[parts.length - 1])) {
-            document.getElementById("photo").className = "wrong";
-            console.log("Photo is not a png or jpg");
-            return false;
-        }
-    } else {
-        document.getElementById("photo").classList.remove("wrong");
-    }
-    if (params.hname.length > 100 || params.hname.length < 1) { //Verif name
-        document.getElementById("hname").className = "wrong";
-        console.log("Name is too long or too short");
-        return false;
-    } else {
-        document.getElementById("hname").classList.remove("wrong");
-    }
-    if (new Date(params.birthdate) > new Date()) { //Verif Date
-        document.getElementById("birth").className = "wrong";
-        console.log("Date is in the future");
-        return false;
-    } else {
-        document.getElementById("birth").classList.remove("wrong");
-    }
-    if (params.height > 500 || params.height < 20) { //Verif height
-        document.getElementById("height").className = "wrong";
-        console.log("Height is too big or too small");
-        return false;
-    } else {
-        document.getElementById("height").classList.remove("wrong");
-    }
-    if (params.comment.length > 500000) { //Verif comment
-        document.getElementById("comment").className = "wrong";
-        console.log("Comment is too long");
-        return false;
-    } else {
-        document.getElementById("comment").classList.remove("wrong");
-    }
-    console.log("Vérifications ok")
-    return true;
-}
-
 export default AddHorse;
