@@ -43,7 +43,7 @@ const AddHorse = () => {
 
         const formFields = event.target.elements;
         if (formFields.photo.files[0] !== undefined) {
-            formData.photo = formFields.photo.files[0]
+            formData.photo = formFields.photo.files[0].name
         }
         formData.hname = formFields.hname.value
         formData.gender = formFields.gender.value
@@ -67,10 +67,10 @@ const AddHorse = () => {
         }).then(response => {
             return response.json()
         }).then(res => {
-            if (res.errormsg.length !== 0) {
-                errorDisplay(res.errormsg)
-            } else {
+            if (res === 200) {
                 successDisplay()
+            } else {
+                errorDisplay(res.errormsg)
             }
         })
     }
