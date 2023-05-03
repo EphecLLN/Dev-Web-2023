@@ -34,8 +34,8 @@ exports.addHorse = (req, res, next) => {
         if (typeof req.body.hname !== "string" || req.body.hname.length > 100 || req.body.hname.length < 1) { //Verif name
             errormsg.push("Nom invalide: Le nom du cheval doit contenir entre 1 et 100 caractères")
         }
-        if (!Number.isInteger(req.body.height) || req.body.height > 400 || req.body.height < 20) { //Verif height
-            errormsg.push("Taille invalide: La taille du cheval ne peut être comprise qu'entre 20 et 500 cm")
+        if (!Number.isInteger(req.body.height) || req.body.height > 400) { //Verif height
+            errormsg.push("Taille invalide: La taille du cheval ne peux pas dépasser 400 cm")
         }
         if (typeof req.body.comment !== "string" || req.body.comment.length > 500000) { //Verif comment
             errormsg.push("Commentaire invalide: Le commentaire ne peut pas dépasser 500000 caractères")

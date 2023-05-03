@@ -40,7 +40,6 @@ const AddHorse = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-
         const formFields = event.target.elements;
         if (formFields.photo.files[0] !== undefined) {
             formData.photo = formFields.photo.files[0].name
@@ -51,13 +50,13 @@ const AddHorse = () => {
         formData.breed = Number(formFields.breed.value)
         if (formFields.breeder.value !== "null") {
             formData.breeder = Number(formFields.breeder.value)
+        } else {
+            formData.breeder = null
         }
         formData.coat = Number(formFields.coat.value)
         formData.height = Number(formFields.height.value)
         formData.statut = formFields.statut.value
         formData.comment = formFields.comment.value
-
-        console.log(formData)
         fetch("http://localhost:3000/api/horse/addHorse", {
             method: 'POST',
             body: JSON.stringify(formData),
@@ -76,18 +75,17 @@ const AddHorse = () => {
     }
 
     const errorDisplay = (errormsg) => {
+        let txt = ""
         for (let i in errormsg) {
-            console.log(errormsg[i]) //Ajouter sur la page les erreurs
+            txt += errormsg[i] + "\n"
         }
-        //document.getElementById("error").innerText = "Erreur lors de l'ajout du cheval"
-        //document.getElementById("error").style.backgroundColor = "rgba(255, 0, 0, 0.68)"
-        console.log("error")
+        document.getElementById("errordisplay").innerText = txt
+        document.getElementById("errordisplay").style.backgroundColor = "rgba(220,101,101,0.68)"
     }
     const successDisplay = () => {
-        //document.getElementById("button").style.display = "none"
-        document.getElementById("success").innerText = "Cheval ajouté avec succès à la base de données"
-        document.getElementById("success").style.backgroundColor = "rgba(149, 203, 148, 0.68)"
-        console.log("success")
+        document.getElementById("button").style.display = "none"
+        document.getElementById("successdisplay").innerText = "Cheval ajouté avec succès à la base de données"
+        document.getElementById("successdisplay").style.backgroundColor = "rgba(149, 203, 148, 0.68)"
     }
 
     if (isLoaded) {
@@ -119,7 +117,7 @@ const AddHorse = () => {
                         <p>* Champs Obligatoires</p>
                         <button id="button" className={"btn"} type="submit">Ajouter</button>
                     </div>
-                    <div id="success">
+                    <div id="successdisplay">
                     </div>
                 </div>
             </form>
@@ -152,7 +150,7 @@ const AddHorse = () => {
                         <p>* Champs Obligatoires</p>
                         <button id="button" className={"btn"} type="submit">Ajouter</button>
                     </div>
-                    <div id="success">
+                    <div id="successdisplay">
                     </div>
                 </div>
             </form>
@@ -186,6 +184,8 @@ const FormTop = () => {
             <div className={"field"}>
                 <label htmlFor="comment">Besoins médicaux / Commentaire<br/></label>
                 <textarea id="comment" name="comment" rows="4" cols="50"/>
+            </div>
+            <div id="errordisplay">
             </div>
         </div>
     );

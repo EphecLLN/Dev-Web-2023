@@ -37,17 +37,20 @@ form{
     background-color: #d91313;
 }
 
-#success{
+#successdisplay{
     padding: 1em;
     border-radius: 3em;
     display: block;
     margin: 2%;
 }
 
-#backbutton{
-    display: none;
-}
-
 .blockbutton{
     display: block;
+}
+
+#errordisplay{
+    padding: 1em;
+    border-radius: 3em;
+    display: block;
+    margin: 2%;
 }
