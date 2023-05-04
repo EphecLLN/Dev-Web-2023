@@ -18,7 +18,7 @@ const AddHorse = () => {
         statut: "elev",
         comment: "",
     });
-    const fetchOptions = (opt) => {
+    const fetchOptions = () => {
         fetch("http://localhost:3000/api/horse/options")
             .then(response => {
                 if (response.ok) {
